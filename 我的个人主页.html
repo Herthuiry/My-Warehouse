@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Herthuiry's Home</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                background-color: #212121;
+                padding-top: max(60px, 8vh);
+                min-height: 100vh;
+                color: #fff;
+                font-family: system-ui, sans-serif;
+            }
+            header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background-color: #3A3A3A;
+                padding: max(12px, 2vh) max(16px, 4vw);
+                font-size: clamp(18px, 5vw, 24px);
+                font-weight: bold;
+                z-index: 999;
+                color: #fff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .vertical-slider {
+                padding: 0 max(16px, 4vw);
+                scroll-snap-type: y proximity;
+                transition: opacity 0.3s ease;
+            }
+            .card {
+                background: #1a1a1d;
+                border-radius: 16px;
+                padding: max(24px, 4vw);
+                margin: max(16px, 3vw) 0;
+                scroll-snap-align: start;
+            }
+            h2 {
+                margin-bottom: 12px;
+                font-size: clamp(20px, 4vw, 26px);
+            }
+            h3 {
+                margin: 16px 0 12px;
+                font-size: clamp(18px, 4vw, 24px);
+                color: #ccc;
+            }
+            p {
+                line-height: 1.6;
+                color: #ccc;
+            }
+            span {
+                line-height: 1.6;
+                color: #ccc;
+            }
+            a,button{
+                display: inline-block;
+                margin: 12px 6px;
+                padding: 8px 16px;
+                background: #1a1a1d;
+                outline: 2px solid #ccc;
+                color: #fff;
+                border-radius: 8px;
+                text-decoration: none;
+            }
+            .setting-icon {
+                 font-size: clamp(18px, 4vw, 24px);
+                 cursor: pointer;
+                 color: #fff;
+            }
+            .setting-ui {
+                position: fixed;
+                z-index: 998;
+                top: max(60px, 8vh);
+                left: max(16px, 3vw);
+                right: max(16px, 3vw);
+                bottom: max(16px, 3vw); /* 用 bottom 替代 height，自动适配屏幕 */
+                background-color: #2d2d32;
+                border: 2px solid #444448; /* 保留你要的边框 */
+                border-radius: 16px;
+                padding: max(24px, 4vw);
+                overflow-y: auto; /* 内容超出时可滚动，关键修复 */
+                transition: opacity 0.3s ease;
+                opacity: 0;
+                pointer-events: none;
+                margin: 0;
+            }
+            .setting-ui.show {
+                opacity: 1; /* 显示（动画淡入） */
+                pointer-events: auto; /* 允许设置面板自身点击 */
+            }
+            .popup{
+                position: fixed;
+                z-index: 1000;
+                width: 220px;
+                padding: 15px;
+                background-color: #212121;
+                border: 2px solid #444448;
+                border-radius: 16px;
+                color: white;
+                font-size: 15px;
+                opacity: 0;
+                transform: scale(0.9);
+                animation: popup-fade-in 0.5s ease-out forwards;
+            }
+            @keyframes popup-fade-in {
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            .red-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(255, 0, 0, 0.2);
+                z-index: 997;
+                pointer-events: none;
+                animation: red-pulse 1s infinite alternate;
+            }
+            @keyframes red-pulse {
+                from { background: rgba(255, 0, 0, 0.15); }
+                to { background: rgba(255, 0, 0, 0.3); }
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body>
+        <header>
+            Herthuiry's Home
+            <i class="fa fa-cog" style="font-size:24px; cursor:pointer;" onclick="OpenSetting()"></i>
+        </header>
+        <div class="setting-ui" id="SettingUI">
+            <h2>
+                <span onclick="CloseSetting()" style="font-size:24px; cursor:pointer;">←</span>
+                设置
+            </h2>
+            <h3>通用</h3>
+            <span>刷新界面</span>
+            <button onclick="window.location.reload(true);">刷新</button>
+            <h3>其他</h3>
+            <button onclick="about()">关于本网站</button>
+            <button onclick="feedback()">反馈</button>
+            <p>
+            <button onclick="EasterEgg()" style="outline: 2px solid #FF0000;">千万别点</button>
+        </div>
+        <div class="vertical-slider" id="VerticalSlider">
+            <div class="card">
+                <h2>自我介绍</h2>
+                <p>我是Herthuiry，是一个人，同时也是个学生和一个小博主</p>
+            </div>
+            <div class="card">
+                <h2>目前主攻</h2>
+                <h3>社交平台</h3>
+                <p>抖音（应该只要是字节的都有吧），哔哩哔哩，快手（该没有实质性的作用），QQ，微信😋</p>
+                <a href="https://m.douyin.com/share/user/MS4wLjABAAAA6snBjwMU8QumsUMHHrTviMSVHYC5u5W_KDH1i3jt9-Kh8hpPucW-y9dUeZx5Db-H">前往我的抖音</a>
+                <a href="https://m.bilibili.com/space/3546594355972297?from=search">前往我的哔哩哔哩</a>
+                <h3>游戏</h3>
+                <p>我的世界（网易基岩版，国际基岩版和JAVA版，虽然并没有正版），蛋仔派对（浅退），Spaceflight Simulator（航天模拟器），以及还有一大堆杂七杂八的🤔</p>
+            </div>
+            <div class="card">
+                <h2>下载站</h2>
+                <p>
+                    <h3>Supermium</h3>
+                    为老旧设备适配的Chrome第三方版本
+                    <a href="https://github.com/win32ss/supermium/releases">Github Releases</a>
+                </p>
+                <p>
+                    <h3>Plain Craft Launcher 2</h3>
+                    插件丰富，模组下载速度快，支持整合包的《我的世界》JAVA版的启动器
+                    <a href="https://ifdian.net/a/LTCat">爱发电主页</a>
+                </p>
+            </div>
+            <div class="card">
+                <h2>网站</h2>
+                <p>
+                    打开百度：
+                    <a href="https://www.baidu.com">Go!</a>
+                </p>
+                <p>
+                    打开必应：
+                    <a href="https://cn.bing.com">Go!</a>
+                </p>
+                <p>
+                    打开Google(这可能需要一点点魔法)：
+                    <a href="https://www.google.com.hk" onclick="alert('记得打开魔法哦😉')">Go!</a>
+                </p>
+            </div>
+        </div>
+        <script>
+            const settingUI = document.getElementById("SettingUI");
+            const verticalSlider = document.getElementById("VerticalSlider");
+            function OpenSetting() {
+              settingUI.classList.add("show");
+              verticalSlider.style.pointerEvents = "none";
+              verticalSlider.style.opacity = 0.4;
+            };
+            function CloseSetting() {
+              settingUI.classList.remove("show");
+              verticalSlider.style.pointerEvents = "auto";
+              verticalSlider.style.opacity = 1;
+            };
+            function about() {
+                alert("关于本网站：\nHerthuiry's Home   ver:26.03.1\n开发人员：\n作者/设计：鱼暗Herthuiry\n设计：一架华航的737");
+            };
+            function EasterEgg() {
+                CloseSetting();
+                if (Math.floor(Math.random() * 2) === 1) {
+                    window.location.href = "https://www.bilibili.com/video/BV1GJ411x7h7/";
+                }else{
+                    window.location.href = "https://www.bilibili.com/video/BV1dg4y1Z7B1/";
+                }
+            }
+            function feedback() {
+                alert("反馈邮箱1：herthuiry@outlook.com\n反馈邮箱2：3561593157@qq.com\n反馈邮箱3：herthuiry@yeah.net");
+            };
+        </script>
+    </body>
+</html>
